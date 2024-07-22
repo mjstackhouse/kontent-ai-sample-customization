@@ -53,8 +53,9 @@ const Articles: React.FC = () => {
 
   const articlesComponent = articles[language].reduce(
     (result: JSX.Element[], article: ArticleType, index: number) => {
-      if (index % 4 === 0) {
-        result.push(<div className="clear" key={counter++} />);
+      // Stop displaying more articles after 4
+      if (index >= 4) {
+        return result;
       }
 
       const title =
@@ -83,7 +84,8 @@ const Articles: React.FC = () => {
           ? article.elements.summary.value
           : formatMessage({ id: 'noSummaryValue' });
 
-      const link = article.system.id;
+      // Use the SEO-friendly URL slug instead of the database ID
+      const link = article.elements.urlPattern.value;
 
       result.push(
         <div className="col-md-3" key={counter++}>

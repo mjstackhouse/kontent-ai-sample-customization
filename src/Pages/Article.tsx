@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { spinnerService } from '@simply007org/react-spinners';
 import { useEffect, useState } from 'react';
 import {
@@ -13,49 +13,82 @@ import { Article as ArticleType } from '../Models/content-types/article';
 import { contentTypes } from '../Models/project/contentTypes';
 import { resolveChangeLanguageLink } from '../Utilities/LanugageLink';
 import { useClient } from '../Client';
+import { MultipleItemsQuery } from '@kontent-ai/delivery-sdk';
 
-const Article: React.FC = () => {
+const Article: React.FC= () => {
   const { locale: language, formatDate, formatMessage } = useIntl();
   const { articleId } = useParams();
   const [article, setArticle] = useState(initLanguageCodeObject<ArticleType>());
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [Client] = useClient();
+  // Variable to store the article's codename and check if it's the user's first visit to the page
+  const articleCodename = useRef('');
 
   useEffect(() => {
     spinnerService.show('apiSpinner');
 
-    const query = Client.items<ArticleType>()
-      .type(contentTypes.article.codename)
-      .equalsFilter('system.id', articleId!!)
-      .elementsParameter([
-        'title',
-        'teaser_image',
-        'post_date',
-        'body_copy',
-        'video_host',
-        'video_id',
-        'tweet_link',
-        'theme',
-        'display_options',
-        'metadata__meta_title',
-        'metadata__meta_description',
-        'metadata__og_title',
-        'metadata__og_description',
-        'metadata__og_image',
-        'metadata__twitter_title',
-        'metadata__twitter_site',
-        'metadata__twitter_creator',
-        'metadata__twitter_description',
-        'metadata__twitter_image',
-      ]);
+    let query: MultipleItemsQuery;
+    // Regex to use the URL slug for finding the article's codename
+    const hyphenRegex = /-/g;
 
-    if (language) {
-      query.languageParameter(language);
+    // Execute different kinds of queries depending on the context
+    if (articleCodename.current === '') {
+      if (language) {
+        query = Client.items<ArticleType>()
+        .type(contentTypes.article.codename)
+        .equalsFilter('elements.url_pattern', articleId!!)
+      }
+      else {
+        query = Client.items<ArticleType>()
+        .type(contentTypes.article.codename)
+        .equalsFilter('system.codename', articleId?.replace(hyphenRegex, '_')!!);
+      }
+    }
+    else {
+      query = Client.items<ArticleType>()
+      .type(contentTypes.article.codename)
+      .equalsFilter('system.codename', articleCodename.current);
     }
 
+    if (language) query.languageParameter(language);
+
+    query.elementsParameter([
+          'title',
+          'teaser_image',
+          'post_date',
+          'body_copy',
+          'video_host',
+          'video_id',
+          'tweet_link',
+          'url_pattern',
+          'theme',
+          'display_options',
+          'metadata__meta_title',
+          'metadata__meta_description',
+          'metadata__og_title',
+          'metadata__og_description',
+          'metadata__og_image',
+          'metadata__twitter_title',
+          'metadata__twitter_site',
+          'metadata__twitter_creator',
+          'metadata__twitter_description',
+          'metadata__twitter_image',
+      ]);
+
     query.toPromise().then((response) => {
+      // Handling navigation upon any errors
+      if (response.data.items.length < 1) {
+        navigate(`${language}/404`);
+      }
+
       const currentLanguage = language || defaultLanguage;
+      const articleSlug = pathname.split('/')[3];
+
+      // Checking if the URL slug is in the right language
+      if (response.data.items[0].elements.urlPattern.value !== articleSlug) {
+        navigate(`/${language.toLocaleLowerCase()}/articles/${response.data.items[0].elements.urlPattern.value}`, { replace: true });
+      }
 
       if (response.data.items[0].system.language !== language) {
         navigate(
@@ -66,6 +99,8 @@ const Article: React.FC = () => {
           { replace: true }
         );
       }
+      
+      articleCodename.current = response.data.items[0].system.codename;
 
       spinnerService.hide('apiSpinner');
       setArticle((data) => ({

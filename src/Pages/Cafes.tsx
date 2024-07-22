@@ -9,7 +9,6 @@ import {
   initLanguageCodeObjectWithArray,
 } from '../Utilities/LanguageCodes';
 import { useIntl } from 'react-intl';
-import { CafeModel } from '../ViewModels/CafeModel';
 import { Cafe } from '../Models/content-types/cafe';
 import { contentTypes } from '../Models/project/contentTypes';
 
@@ -45,12 +44,8 @@ const Cafes: React.FC = () => {
   if (cafes[language].length === 0) {
     return <div className="container" />;
   }
-  const companyCafes = cafes[language].filter(
-    (cafe: Cafe) => cafe.elements.country.value === 'USA'
-  );
-  const partnerCafes = cafes[language].filter(
-    (cafe: Cafe) => cafe.elements.country.value !== 'USA'
-  );
+
+  const companyCafes = cafes[language];
 
   const companyCafeComponents = companyCafes.map((cafe: Cafe) => {
     const model = createCafeModel(cafe);
@@ -85,45 +80,10 @@ const Cafes: React.FC = () => {
     );
   });
 
-  const partnerCafeModels = partnerCafes.map((cafe: Cafe) =>
-    createCafeModel(cafe)
-  );
-
-  const partnerCafeLocations = partnerCafeModels
-    .map((model: CafeModel) => model.location)
-    .reduce((result: string[], location: string) => {
-      if (result.indexOf(location) < 0) {
-        result.push(location);
-      }
-      return result;
-    }, [])
-    .sort();
-
-  const partnerCafeComponents = partnerCafeLocations.map((location: string) => {
-    const locationPartnerCafes = partnerCafeModels
-      .filter((model: CafeModel) => model.location === location)
-      .map((model: CafeModel, modelIndex: number) => {
-        return (
-          <p key={modelIndex}>
-            {model.name}, {model.street}, {model.phone}
-          </p>
-        );
-      });
-
-    return (
-      <div key={location}>
-        <h3>{location}</h3>
-        {locationPartnerCafes}
-      </div>
-    );
-  });
-
   return (
     <div className="container">
       <h2>{formatMessage({ id: 'Cafes.ourCafesTitle' })}</h2>
       <div className="row">{companyCafeComponents}</div>
-      <h2>{formatMessage({ id: 'Cafes.partnerCafesTitle' })}</h2>
-      <div className="row">{partnerCafeComponents}</div>
     </div>
   );
 };

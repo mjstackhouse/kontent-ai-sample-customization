@@ -16,6 +16,17 @@ const Header: React.FC<HeaderProps> = (props) => {
   const { locale: language, formatMessage } = useIntl();
   return (
     <header className="header" role="banner">
+      <div className="header-row">
+        <div className="container">
+          <div className="logo">
+            <h1 className="logo logo-container">
+              <Link to={`/${language}`} className="logo-link">
+                <img className='logo-image' alt='dancing goat logo'/>
+              </Link>
+            </h1>
+          </div>
+        </div>
+      </div>
       <div className="menu">
         <div className="container">
           <nav>
@@ -95,17 +106,6 @@ const Header: React.FC<HeaderProps> = (props) => {
         </div>
       </div>
       {messageBox}
-      <div className="header-row">
-        <div className="container">
-          <div className="col-xs-8 col-md-8 col-lg-4 logo">
-            <h1 className="logo">
-              <Link to={`/${language}`} className="logo-link">
-                Dancing Goat
-              </Link>
-            </h1>
-          </div>
-        </div>
-      </div>
     </header>
   );
 };

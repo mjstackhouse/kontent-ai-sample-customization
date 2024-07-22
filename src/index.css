@@ -1145,7 +1145,7 @@ body {
 }
 .application-content .menu {
   display: block;
-  background: #b24143;
+  background: #315987;
   text-transform: uppercase;
   line-height: 3rem;
 }
@@ -1155,12 +1155,12 @@ body {
 }
 .application-content .menu li:first-child > a:focus,
 .application-content .menu li:first-child > a:hover {
-  background-color: #ba5455;
+  background-color: #08768c;
 }
 .application-content .menu .CMSListMenuHighlightedLI > a,
 .application-content .menu a:focus,
 .application-content .menu a:hover {
-  background-color: #ba5455;
+  background-color: #08768c;
 }
 .application-content .menu a,
 .application-content .menu a:hover,
@@ -1192,7 +1192,7 @@ body {
 }
 .application-content #mobile-menu-btn:focus,
 .application-content #mobile-menu-btn:hover {
-  background-color: #ba5455;
+  background-color: #08768c;
   outline: none;
 }
 .application-content #mobile-menu-btn a:focus,
@@ -1207,19 +1207,19 @@ body {
   vertical-align: middle;
 }
 .application-content .mobile-menu {
-  background: #b24143;
+  background: #315987;
   text-transform: uppercase;
   line-height: 3rem;
 }
 .application-content .mobile-menu li:first-child > a:focus,
 .application-content .mobile-menu li:first-child > a:hover {
-  background-color: #ba5455;
+  background-color: #08768c;
   outline: none;
 }
 .application-content .mobile-menu .CMSListMenuHighlightedLI > a,
 .application-content .mobile-menu a:focus,
 .application-content .mobile-menu a:hover {
-  background-color: #ba5455;
+  background-color: #08768c;
   outline: none;
 }
 .application-content .mobile-menu a,
@@ -5400,15 +5400,28 @@ body {
   margin-bottom: 30px;
 }
 .application-content .header-row {
-  padding-top: 2.5rem;
+  padding: 1.5rem 0 0.8rem 0;
 }
 .application-content .logo {
-  text-align: left;
+  text-align: center;
   margin: 0;
+}
+.application-content .logo-image {
+  content: url('./Images/dancing-goat-logo.gif');
+  height: 2.75rem;
+  width: auto;
+  margin: auto;
+}
+@media (prefers-reduced-motion) {
+  .application-content .logo-image {
+    content: url('./Images/dancing-goat-logo.png');
+  }
 }
 .application-content .logo-link,
 .application-content .logo-link:hover,
 .application-content .logo-link:focus {
+  display: flex;
+  padding: 0.5rem;
   text-decoration: none;
   color: #fff;
 }
@@ -5520,6 +5533,9 @@ body {
   text-transform: uppercase;
   font-weight: bold;
 }
+.application-content .btn-more:hover {
+  background: #F5F5F5;
+}
 .application-content .btn-hide-and-seek {
   background-color: transparent;
   transition: all 0.3s ease 0s;
@@ -5584,6 +5600,9 @@ body {
 .application-content .article-tile-image {
   width: 100%;
   display: block;
+}
+.application-content .article-tile-image:hover {
+  filter: brightness(0.75);
 }
 .application-content .placeholder-tile-image {
   align-items: center;
