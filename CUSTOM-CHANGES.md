@@ -8,7 +8,7 @@
 ## Smaller Custom Changes
 
 - Removed the 'partnerCafe' code in 'Cafes.tsx' since filtering and displaying the cafes separately was no longer needed
-- Gave the new article a real title (not lorem ipsum) so it could be translated into a Spanish version
+- Gave the new article a real title (not lorem ipsum) so it could be translated into a Spanish version of the content using Kontent.ai's AI translation tool
 - Used a slightly darker blue for the main menu/navigation bar than the provided screenshot to pass the WCAG AAA guidelines for color contrast
 - Updated the hover background color on the navigation buttons to the other blue used on the site (instead of red) to make the UI more cohesive
 - Added a gray hover background color for the 'article-tile-image' class to improve the user experience
